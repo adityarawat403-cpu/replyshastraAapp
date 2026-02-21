@@ -18,7 +18,6 @@ color:white;
 height:100vh;
 display:flex;
 flex-direction:column;
-overflow:hidden;
 }
 
 /* HEADER */
@@ -34,41 +33,8 @@ font-size:22px;
 letter-spacing:2px;
 }
 
-/* MENU */
 .menu{
 font-size:26px;
-cursor:pointer;
-}
-
-/* SIDEBAR */
-.sidebar{
-position:fixed;
-top:0;
-right:-260px;
-width:260px;
-height:100%;
-background:#111116;
-transition:.3s;
-padding:20px;
-z-index:999;
-}
-
-.sidebar.active{
-right:0;
-}
-
-.sidebar h3{
-margin-top:0;
-}
-
-.sidebar button{
-width:100%;
-padding:12px;
-margin-top:10px;
-background:#1b1b24;
-color:white;
-border:none;
-border-radius:8px;
 cursor:pointer;
 }
 
@@ -82,8 +48,9 @@ flex-direction:column;
 gap:10px;
 }
 
+/* MESSAGE BUBBLES */
 .msg{
-max-width:75%;
+max-width:80%;
 padding:12px 14px;
 border-radius:14px;
 line-height:1.5;
@@ -91,7 +58,7 @@ white-space:pre-wrap;
 }
 
 .user{
-background:#4f63ff;
+background:#5865f2;
 align-self:flex-end;
 }
 
@@ -100,8 +67,35 @@ background:#1a1a22;
 align-self:flex-start;
 }
 
-/* INPUT */
+/* WELCOME CARD */
+.welcome{
+background:#15151c;
+border-radius:16px;
+padding:16px;
+margin-bottom:10px;
+}
+
+.quick{
+display:flex;
+flex-direction:column;
+gap:10px;
+margin-top:12px;
+}
+
+.quick button{
+padding:12px;
+border-radius:12px;
+border:none;
+background:#1e1e28;
+color:white;
+font-size:14px;
+cursor:pointer;
+}
+
+/* INPUT BOX */
 .inputbox{
+position:sticky;
+bottom:0;
 display:flex;
 padding:10px;
 background:#0f0f14;
@@ -124,13 +118,13 @@ margin-left:8px;
 padding:12px 18px;
 border:none;
 border-radius:12px;
-background:#4f63ff;
+background:#5865f2;
 color:white;
 font-weight:bold;
 cursor:pointer;
 }
 
-/* TYPING */
+/* TYPING DOTS */
 .typing{
 display:flex;
 gap:5px;
@@ -163,30 +157,34 @@ animation:blink 1.4s infinite;
 
 <div class="header">
 ReplyShastra
-<div class="menu" onclick="toggleMenu()">☰</div>
+<div class="menu">☰</div>
 </div>
 
-<div id="sidebar" class="sidebar">
-<h3>Settings</h3>
-<button onclick="alert('Coming Soon')">My Plan</button>
-<button onclick="alert('Premium Soon')">Premium</button>
-<button onclick="clearChat()">Clear Chat</button>
+<div id="chat" class="chat">
+
+<div class="welcome">
+<b>Bhai welcome 🤝</b><br><br>
+Apni situation likh ya niche se select kar —  
+Main tujhe exact message dunga jo tu usse bhejega.
+
+<div class="quick">
+<button onclick="quickMsg('Meri girlfriend gussa hai mujhse')">😤 Girlfriend gussa</button>
+<button onclick="quickMsg('Wo seen karke reply nahi kar rahi')">❄️ Seen karke reply nahi</button>
+<button onclick="quickMsg('Breakup ho gaya hai')">💔 Breakup ho gaya</button>
 </div>
 
-<div id="chat" class="chat"></div>
+</div>
+
+</div>
 
 <div class="inputbox">
-<input id="msg" placeholder="Apni situation likh..." onkeypress="if(event.key==='Enter') send()">
+<input id="msg" placeholder="Apni situation likh...">
 <button class="send" onclick="send()">Send</button>
 </div>
 
 <script>
 
 const chat=document.getElementById("chat");
-
-function toggleMenu(){
-document.getElementById("sidebar").classList.toggle("active");
-}
 
 function addMessage(text,type){
 let div=document.createElement("div");
@@ -210,12 +208,12 @@ let t=document.getElementById("typing");
 if(t) t.remove();
 }
 
-function clearChat(){
-chat.innerHTML="";
+function quickMsg(text){
+document.getElementById("msg").value=text;
+send();
 }
 
 async function send(){
-
 let input=document.getElementById("msg");
 let text=input.value.trim();
 if(!text) return;
@@ -226,34 +224,21 @@ input.value="";
 showTyping();
 
 try{
-
 let res=await fetch("https://replyshastraai-production.up.railway.app/chat",{
 method:"POST",
-headers:{
-"Content-Type":"application/json"
-},
+headers:{"Content-Type":"application/json"},
 body:JSON.stringify({message:text})
 });
 
 let data=await res.json();
 
 removeTyping();
-
-/* IMPORTANT FIX */
-let reply = data.reply || data.response || data.message || "AI ne reply nahi diya, server warm ho raha hai.";
-
-addMessage(reply,"bot");
+addMessage(data.reply,"bot");
 
 }catch(e){
 removeTyping();
-addMessage("Server abhi start ho raha hai... 20 sec baad fir try karo.","bot");
+addMessage("Server busy... thodi der baad try karo.","bot");
 }
-
-}
-
-/* Welcome message */
-window.onload=()=>{
-addMessage("Bhai welcome 🤝\nApni situation simple likh.\nMain tujhe exact message dunga jo tu usse bhejega.","bot");
 }
 
 </script>
