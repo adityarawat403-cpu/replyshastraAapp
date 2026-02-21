@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ReplyShastra</title>
+
 <meta name="google-site-verification" content="rznJYnPQ3urHS3woTdqlZZ0ohdCoHf4GwCjjZlhM1WE" />
+
 <style>
 *{box-sizing:border-box;}
 
@@ -32,6 +34,7 @@ font-size:22px;
 letter-spacing:2px;
 }
 
+/* MENU */
 .menu{
 font-size:26px;
 cursor:pointer;
@@ -127,7 +130,7 @@ font-weight:bold;
 cursor:pointer;
 }
 
-/* TYPING DOTS */
+/* TYPING */
 .typing{
 display:flex;
 gap:5px;
@@ -165,15 +168,15 @@ ReplyShastra
 
 <div id="sidebar" class="sidebar">
 <h3>Settings</h3>
-<button>My Plan</button>
-<button>Premium</button>
-<button>Clear Chat</button>
+<button onclick="alert('Coming Soon')">My Plan</button>
+<button onclick="alert('Premium Soon')">Premium</button>
+<button onclick="clearChat()">Clear Chat</button>
 </div>
 
 <div id="chat" class="chat"></div>
 
 <div class="inputbox">
-<input id="msg" placeholder="Apni situation likh...">
+<input id="msg" placeholder="Apni situation likh..." onkeypress="if(event.key==='Enter') send()">
 <button class="send" onclick="send()">Send</button>
 </div>
 
@@ -197,7 +200,6 @@ function showTyping(){
 let div=document.createElement("div");
 div.className="typing";
 div.id="typing";
-
 div.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>";
 chat.appendChild(div);
 chat.scrollTop=chat.scrollHeight;
@@ -208,7 +210,12 @@ let t=document.getElementById("typing");
 if(t) t.remove();
 }
 
+function clearChat(){
+chat.innerHTML="";
+}
+
 async function send(){
+
 let input=document.getElementById("msg");
 let text=input.value.trim();
 if(!text) return;
@@ -219,21 +226,34 @@ input.value="";
 showTyping();
 
 try{
+
 let res=await fetch("https://replyshastraai-production.up.railway.app/chat",{
 method:"POST",
-headers:{"Content-Type":"application/json"},
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify({message:text})
 });
 
 let data=await res.json();
 
 removeTyping();
-addMessage(data.reply,"bot");
+
+/* IMPORTANT FIX */
+let reply = data.reply || data.response || data.message || "AI ne reply nahi diya, server warm ho raha hai.";
+
+addMessage(reply,"bot");
 
 }catch(e){
 removeTyping();
-addMessage("Server busy... thodi der baad try karo.","bot");
+addMessage("Server abhi start ho raha hai... 20 sec baad fir try karo.","bot");
 }
+
+}
+
+/* Welcome message */
+window.onload=()=>{
+addMessage("Bhai welcome 🤝\nApni situation simple likh.\nMain tujhe exact message dunga jo tu usse bhejega.","bot");
 }
 
 </script>
