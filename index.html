@@ -34,8 +34,6 @@ input{flex:1;padding:14px;border-radius:14px;border:none;background:#0e0e14;colo
 @keyframes blink{0%,80%,100%{opacity:.2}40%{opacity:1}}
 </style>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
 </head>
 <body>  <div id="splash">
 <img src="icon.png">
@@ -52,7 +50,7 @@ input{flex:1;padding:14px;border-radius:14px;border:none;background:#0e0e14;colo
 <a href="javascript:void(0)" onclick="rateApp()">Rate App</a>      
 <hr style="opacity:.2;margin:25px 0;">      
 <a href="javascript:void(0)" onclick="showPremium()">Subscription</a>      
-<a href="javascript:void(0)" onclick="loginWithGoogle()">Login</a>      
+<a href="javascript:void(0)" onclick="LoginWithGoogle()">Login</a>      
 <a href="javascript:void(0)" onclick="logoutUser()">Logout</a>      
 </div>  <div id="menuOverlay"></div>  <div class="header">      
 <div class="menuBtn" onclick="toggleMenu()">☰</div>      
@@ -209,6 +207,8 @@ navigator.serviceWorker.register('sw.js');
 
  <!-- FIREBASE LOGIN WORKING FINAL -->
 <script type="module">
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
  getAuth,
