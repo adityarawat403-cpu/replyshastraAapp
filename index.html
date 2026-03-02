@@ -1,7 +1,10 @@
-<!DOCTYPE html><html>
+<!DOCTYPE html>
+<html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReplyShastra Login</title><style>
+<title>ReplyShastra Login</title>
+
+<style>
 body{
 background:#050008;
 color:white;
@@ -35,18 +38,24 @@ background:linear-gradient(135deg,#7b2cff,#b067ff);
 color:white;
 cursor:pointer;
 }
-</style></head><body><div class="card">
+</style>
+</head>
+
+<body>
+
+<div class="card">
 <h1>REPLYSHASTRA 🔱</h1>
 <p>Continue with Google to start</p>
 <br>
 <button class="loginBtn" id="loginBtn">Login with Google</button>
-</div><script type="module">
+</div>
+
+<script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
  getAuth,
  GoogleAuthProvider,
- signInWithRedirect,
- getRedirectResult,
+ signInWithPopup,
  browserLocalPersistence,
  setPersistence,
  onAuthStateChanged
@@ -69,30 +78,29 @@ provider.setCustomParameters({
  prompt: "select_account"
 });
 
-// ⭐ VERY IMPORTANT (REAL FIX)
+// Persistence set
 await setPersistence(auth, browserLocalPersistence);
 
-// Login button
-document.getElementById("loginBtn").onclick = () => {
- signInWithRedirect(auth, provider);
+// LOGIN WITH POPUP
+document.getElementById("loginBtn").onclick = async () => {
+ try {
+   const result = await signInWithPopup(auth, provider);
+   if(result.user){
+     window.location.href = "app.html";
+   }
+ } catch (error) {
+   console.log("Login error:", error);
+   alert("Login failed: " + error.message);
+ }
 };
 
-// When coming back from Google
-getRedirectResult(auth)
-.then((result)=>{
- if(result && result.user){
-   window.location.href="app.html";
- }
-})
-.catch((error)=>{
- console.log("Redirect error:", error);
-});
-
-// If already logged in → skip login page
+// Already logged in user skip login page
 onAuthStateChanged(auth, (user)=>{
  if(user){
    window.location.href="app.html";
  }
 });
-</script></body>
+</script>
+
+</body>
 </html>
