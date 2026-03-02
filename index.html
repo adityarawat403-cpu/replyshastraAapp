@@ -213,7 +213,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import {
  getAuth,
  GoogleAuthProvider,
- signInWithPopup,
+ signInWithRedirect,
+ getRedirectResult,
  signOut,
  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -234,15 +235,8 @@ const provider = new GoogleAuthProvider();
 provider.setCustomParameters({
   prompt: "select_account"
 });
-window.LoginWithGoogle = async function () {
-  try {
-    const result = await signInWithPopup(auth, provider);
-    alert("Welcome " + result.user.displayName);
-    console.log("Logged in:", result.user.email);
-  } catch (error) {
-    console.log("Login error:", error);
-    alert("Login failed: " + error.message);
-  }
+window.LoginWithGoogle = function () {
+  signInWithRedirect(auth, provider);
 };
 
 /* LOGOUT */
@@ -252,6 +246,18 @@ window.logoutUser = function () {
   });
 };
 
+// HANDLE GOOGLE REDIRECT RETURN
+getRedirectResult(auth)
+  .then((result) => {
+    if (result && result.user) {
+      alert("Welcome " + result.user.displayName);
+      console.log("Logged in:", result.user.email);
+    }
+  })
+  .catch((error) => {
+    console.log("Redirect login error:", error);
+  });
+  
 /* AUTO LOGIN */
 onAuthStateChanged(auth, (user) => {
   if (user) {
@@ -261,9 +267,14 @@ onAuthStateChanged(auth, (user) => {
   }
 });
 
-// CONNECT LOGIN BUTTON
-document.getElementById("loginBtn").addEventListener("click", () => {
-  LoginWithGoogle();
+// CONNECT LOGIN BUTTON SAFELY
+window.addEventListener("load", () => {
+  const btn = document.getElementById("loginBtn");
+  if (btn) {
+    btn.addEventListener("click", () => {
+      LoginWithGoogle();
+    });
+  }
 });
   
 </script>
