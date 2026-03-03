@@ -1,16 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReplyShastra Login</title>
+</head>
+<body style="background:#140021;color:white;text-align:center;margin-top:100px;">
+
+<h2>ReplyShastra</h2>
+<button id="loginBtn" style="padding:12px 20px;">Login with Google</button>
+
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
   getAuth,
   GoogleAuthProvider,
-  signInWithPopup,
   signInWithRedirect,
   getRedirectResult,
   onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyABvBLrB9KBCJV1YS-8t3SJrqHUfPqB-7LMo",
+  apiKey: "YOUR_KEY",
   authDomain: "replyshastra.firebaseapp.com",
   projectId: "replyshastra",
   storageBucket: "replyshastra.appspot.com",
@@ -22,39 +32,22 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
-provider.setCustomParameters({
-  prompt: "select_account"
-});
-
-const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-document.getElementById("loginBtn").onclick = async () => {
-  try {
-    if (isMobile) {
-      await signInWithRedirect(auth, provider);
-    } else {
-      const result = await signInWithPopup(auth, provider);
-      if (result.user) {
-        window.location.href = "app.html";
-      }
-    }
-  } catch (error) {
-    console.log(error);
-    alert(error.message);
-  }
+document.getElementById("loginBtn").onclick = () => {
+  signInWithRedirect(auth, provider);
 };
 
-// Handle redirect result (for mobile)
-getRedirectResult(auth).then((result) => {
-  if (result && result.user) {
+getRedirectResult(auth).then(result => {
+  if (result?.user) {
     window.location.href = "app.html";
   }
 });
 
-// Already logged in
-onAuthStateChanged(auth, (user) => {
+onAuthStateChanged(auth, user => {
   if (user) {
     window.location.href = "app.html";
   }
 });
 </script>
+
+</body>
+</html>
