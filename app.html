@@ -45,8 +45,15 @@ justify-content:center;
 z-index:9999;
 }
 
+.introLogo{
+width:130px;
+margin-bottom:20px;
+filter:drop-shadow(0 0 15px #a855f7);
+}
+
 #introTitle{
-font-size:30px;
+font-size:32px;
+letter-spacing:6px;
 margin-bottom:35px;
 opacity:0;
 animation:introFade 2s forwards;
@@ -58,15 +65,38 @@ to{opacity:1;transform:translateY(0);}
 }
 
 #enterBtn{
-padding:14px 28px;
-font-size:20px;
-border-radius:14px;
+padding:16px 35px;
+font-size:18px;
+border-radius:30px;
 border:none;
-background:linear-gradient(135deg,#c0c0c0,#ffffff);
+background:linear-gradient(135deg,#ffffff,#a855f7);
 color:black;
 font-weight:600;
-box-shadow:0 0 10px rgba(255,255,255,.7);
+box-shadow:0 0 15px #a855f7;
 cursor:pointer;
+}
+
+/* WELCOME SCREEN */
+
+#welcomeScreen{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#140021;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9998;
+opacity:0;
+pointer-events:none;
+transition:1s;
+}
+
+#welcomeText{
+font-size:38px;
+letter-spacing:4px;
 }
 
 /* HEADER */
@@ -188,7 +218,7 @@ background:#0e0e14;
 color:white;
 }
 
-/* SILVER BUTTON */
+/* SEND BUTTON */
 
 .sendBtn{
 padding:12px 18px;
@@ -234,8 +264,17 @@ animation:blink 1.2s infinite;
 <!-- INTRO -->
 
 <div id="introScreen">
-<h1 id="introTitle">Welcome To ReplyShastra</h1>
-<button id="enterBtn">Enter</button>
+
+<img src="icon.png" class="introLogo">
+
+<h1 id="introTitle">REPLYSHASTRA</h1>
+
+<button id="enterBtn">🔱 ENTER</button>
+
+</div>
+
+<div id="welcomeScreen">
+<h1 id="welcomeText">Welcome To ReplyShastra</h1>
 </div>
 
 <audio id="introSound" src="intro.mp3"></audio>
@@ -279,15 +318,21 @@ animation:blink 1.2s infinite;
 
 <script>
 
-/* INTRO */
+/* INTRO FLOW */
 
 document.getElementById("enterBtn").onclick=function(){
 
 document.getElementById("introSound").play();
 
-setTimeout(()=>{
 document.getElementById("introScreen").style.display="none";
-},1500);
+
+let welcome=document.getElementById("welcomeScreen");
+
+welcome.style.opacity="1";
+
+setTimeout(()=>{
+welcome.style.display="none";
+},2500);
 
 };
 
@@ -406,5 +451,4 @@ window.location.href="index.html";
 </script>
 
 </body>
-
-</html>wa
+</html>
