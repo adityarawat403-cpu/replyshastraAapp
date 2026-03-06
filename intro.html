@@ -20,7 +20,10 @@ height:100vh;
 flex-direction:column;
 margin:0;
 text-align:center;
+overflow:hidden;
 }
+
+/* LOGO */
 
 .logo{
 width:130px;
@@ -33,6 +36,8 @@ animation:pulse 2s infinite;
 50%{transform:scale(1.08)}
 100%{transform:scale(1)}
 }
+
+/* TITLE */
 
 .title{
 font-size:32px;
@@ -47,6 +52,8 @@ from{opacity:0;transform:translateY(20px)}
 to{opacity:1;transform:translateY(0)}
 }
 
+/* ENTER BUTTON */
+
 .enter{
 padding:14px 32px;
 border-radius:14px;
@@ -58,11 +65,37 @@ cursor:pointer;
 box-shadow:0 0 15px #a855f7;
 }
 
-.enter:hover{
-opacity:.9;
+/* CINEMATIC SCREEN */
+
+#cinematic{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:#090013;
+display:flex;
+align-items:center;
+justify-content:center;
+opacity:0;
+pointer-events:none;
+transition:1s;
+}
+
+#cinematicText{
+font-size:38px;
+letter-spacing:5px;
+text-shadow:0 0 20px #a855f7;
+animation:glow 2s infinite alternate;
+}
+
+@keyframes glow{
+from{opacity:.5;text-shadow:0 0 10px #a855f7}
+to{opacity:1;text-shadow:0 0 30px #c084fc}
 }
 
 </style>
+
 </head>
 
 <body>
@@ -73,13 +106,34 @@ opacity:.9;
 
 <button class="enter" onclick="enter()">🔱 ENTER</button>
 
+<!-- CINEMATIC -->
+
+<div id="cinematic">
+<div id="cinematicText">WELCOME TO REPLYSHASTRA</div>
+</div>
+
+<!-- SOUND -->
+
+<audio id="introSound" src="intro.mp3"></audio>
+
 <script>
 
 function enter(){
+
+document.getElementById("introSound").play()
+
+let cine=document.getElementById("cinematic")
+
+cine.style.opacity="1"
+cine.style.pointerEvents="auto"
+
+setTimeout(()=>{
 window.location="app.html"
+},3000)
+
 }
 
 </script>
 
 </body>
-</html>s
+</html>
