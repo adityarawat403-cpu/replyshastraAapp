@@ -2,10 +2,11 @@
 <html lang="en">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 
-<title>ReplyShastra – AI Relationship Reply Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>ReplyShastra AI</title>
 
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7b2cff">
@@ -27,76 +28,6 @@ background:#050008;
 color:white;
 height:100vh;
 overflow:hidden;
-}
-
-/* INTRO SCREEN */
-
-#introScreen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#140021;
-display:flex;
-flex-direction:column;
-align-items:center;
-justify-content:center;
-z-index:9999;
-}
-
-.introLogo{
-width:130px;
-margin-bottom:20px;
-filter:drop-shadow(0 0 15px #a855f7);
-}
-
-#introTitle{
-font-size:32px;
-letter-spacing:6px;
-margin-bottom:35px;
-opacity:0;
-animation:introFade 2s forwards;
-}
-
-@keyframes introFade{
-from{opacity:0;transform:translateY(25px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-#enterBtn{
-padding:16px 35px;
-font-size:18px;
-border-radius:30px;
-border:none;
-background:linear-gradient(135deg,#ffffff,#a855f7);
-color:black;
-font-weight:600;
-box-shadow:0 0 15px #a855f7;
-cursor:pointer;
-}
-
-/* WELCOME SCREEN */
-
-#welcomeScreen{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:#140021;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:9998;
-opacity:0;
-pointer-events:none;
-transition:1s;
-}
-
-#welcomeText{
-font-size:38px;
-letter-spacing:4px;
 }
 
 /* HEADER */
@@ -169,7 +100,6 @@ display:flex;
 flex-direction:column;
 gap:12px;
 background:url("weapon-bg.png") center/cover no-repeat;
-min-height:100%;
 }
 
 .msg{
@@ -227,7 +157,6 @@ border-radius:14px;
 background:linear-gradient(135deg,#c0c0c0,#ffffff);
 color:black;
 font-weight:600;
-box-shadow:0 0 8px rgba(255,255,255,.6);
 cursor:pointer;
 }
 
@@ -261,32 +190,18 @@ animation:blink 1.2s infinite;
 
 <body>
 
-<!-- INTRO -->
-
-<div id="introScreen">
-
-<img src="icon.png" class="introLogo">
-
-<h1 id="introTitle">REPLYSHASTRA</h1>
-
-<button id="enterBtn">🔱 ENTER</button>
-
-</div>
-
-<div id="welcomeScreen">
-<h1 id="welcomeText">Welcome To ReplyShastra</h1>
-</div>
-
-<audio id="introSound" src="intro.mp3"></audio>
-
 <!-- MENU -->
 
 <div id="menu" class="sideMenu">
-<a href="javascript:void(0)" onclick="shareApp()">Share App</a>
+
+<a href="#">Share App</a>
 <a href="privacy.html">Privacy</a>
-<a href="terms.html">Terms & Conditions</a>
+<a href="terms.html">Terms</a>
+
 <hr style="opacity:.2;margin:25px 0;">
-<a href="javascript:void(0)" onclick="logoutUser()">Logout</a>
+
+<a href="#" onclick="logout()">Logout</a>
+
 </div>
 
 <div id="menuOverlay"></div>
@@ -294,9 +209,15 @@ animation:blink 1.2s infinite;
 <!-- HEADER -->
 
 <div class="header">
+
 <div class="menuBtn" onclick="toggleMenu()">☰</div>
-<div class="logo"><img src="icon.png"></div>
+
+<div class="logo">
+<img src="icon.png">
+</div>
+
 <div>ReplyShastra</div>
+
 </div>
 
 <!-- CHAT -->
@@ -306,11 +227,12 @@ animation:blink 1.2s infinite;
 <!-- INPUT -->
 
 <div class="inputArea">
-<input id="text" placeholder="Describe your situation...">
-<button class="sendBtn" onclick="send()">Send</button>
-</div>
 
-<!-- AUDIO -->
+<input id="text" placeholder="Describe your situation...">
+
+<button class="sendBtn" onclick="send()">Send</button>
+
+</div>
 
 <audio id="sendSound" src="send.mp3"></audio>
 <audio id="replySound" src="reply.mp3"></audio>
@@ -318,135 +240,133 @@ animation:blink 1.2s infinite;
 
 <script>
 
-/* INTRO FLOW */
-
-document.getElementById("enterBtn").onclick=function(){
-
-document.getElementById("introSound").play();
-
-document.getElementById("introScreen").style.display="none";
-
-let welcome=document.getElementById("welcomeScreen");
-
-welcome.style.opacity="1";
-
-setTimeout(()=>{
-welcome.style.display="none";
-},2500);
-
-};
-
 /* MENU */
 
-let menuOpen=false;
+let menuOpen=false
 
 function toggleMenu(){
 
-const menu=document.getElementById("menu");
-const overlay=document.getElementById("menuOverlay");
+const menu=document.getElementById("menu")
+const overlay=document.getElementById("menuOverlay")
 
-menuOpen=!menuOpen;
+menuOpen=!menuOpen
 
-menu.style.left=menuOpen?"0":"-260px";
-overlay.style.display=menuOpen?"block":"none";
+menu.style.left=menuOpen?"0":"-260px"
+overlay.style.display=menuOpen?"block":"none"
 
 }
 
-document.getElementById("menuOverlay").onclick=toggleMenu;
+document.getElementById("menuOverlay").onclick=toggleMenu
 
 /* CHAT */
 
-const chat=document.getElementById("chat");
-const text=document.getElementById("text");
+const chat=document.getElementById("chat")
+const text=document.getElementById("text")
 
-function addMessage(t,type){
+function addMessage(msg,type){
 
-let div=document.createElement("div");
-div.className="msg "+type;
-div.innerText=t;
+let div=document.createElement("div")
+div.className="msg "+type
+div.innerText=msg
 
-chat.appendChild(div);
-chat.scrollTop=chat.scrollHeight;
+chat.appendChild(div)
+
+chat.scrollTop=chat.scrollHeight
 
 }
 
 function showTyping(){
 
-let typing=document.createElement("div");
-typing.className="typing";
-typing.id="typing";
+let typing=document.createElement("div")
 
-typing.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>";
+typing.className="typing"
+typing.id="typing"
 
-chat.appendChild(typing);
-chat.scrollTop=chat.scrollHeight;
+typing.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>"
+
+chat.appendChild(typing)
 
 }
 
 function removeTyping(){
 
-let t=document.getElementById("typing");
-if(t)t.remove();
+let t=document.getElementById("typing")
+
+if(t)t.remove()
 
 }
 
-function send(){
+async function send(){
 
-let msg=text.value.trim();
-if(!msg)return;
+let msg=text.value.trim()
 
-document.getElementById("sendSound").play();
+if(!msg)return
 
-addMessage(msg,"user");
+document.getElementById("sendSound").play()
 
-text.value="";
+addMessage(msg,"user")
 
-showTyping();
+text.value=""
 
-document.getElementById("typingSound").play();
+showTyping()
 
-setTimeout(()=>{
+document.getElementById("typingSound").play()
 
-removeTyping();
+/* AI API */
 
-document.getElementById("replySound").play();
+try{
 
-addMessage("I understand your situation. Try:\n\nHey… I didn’t want to reply casually. I actually wanted to talk properly. Are you okay ❤️","bot");
+const res=await fetch("https://api.openai.com/v1/chat/completions",{
 
-},1500);
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer YOUR_OPENAI_KEY"
+},
+
+body:JSON.stringify({
+
+model:"gpt-4o-mini",
+
+messages:[
+{role:"system",content:"You generate romantic relationship replies."},
+{role:"user",content:msg}
+]
+
+})
+
+})
+
+const data=await res.json()
+
+removeTyping()
+
+document.getElementById("replySound").play()
+
+addMessage(data.choices[0].message.content,"bot")
+
+}catch{
+
+removeTyping()
+
+addMessage("AI error. Try again.","bot")
+
+}
 
 }
 
 text.addEventListener("keypress",e=>{
-if(e.key==="Enter")send();
-});
+if(e.key==="Enter")send()
+})
 
-</script>
+function logout(){
 
-<!-- AUTH -->
+localStorage.removeItem("rs_user")
 
-<script type="module">
+window.location="login.html"
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-const firebaseConfig={
-apiKey:"AIzaSyABvBLrB9KBCJV1YS-8t3SJrqHUfPqB-7LMo",
-authDomain:"replyshastra.firebaseapp.com",
-projectId:"replyshastra",
-storageBucket:"replyshastra.appspot.com",
-messagingSenderId:"346754998835",
-appId:"1:346754998835:web:ecca09c1bb98a5f9a7f946"
-};
-
-const app=initializeApp(firebaseConfig);
-const auth=getAuth(app);
-
-window.logoutUser=function(){
-signOut(auth).then(()=>{
-window.location.href="index.html";
-});
-};
+}
 
 </script>
 
