@@ -1,19 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>ReplyShastra</title>
+
+<script>
+
+if(localStorage.getItem("rs_user")){
+window.location.href="intro.html"
+}else{
+window.location.href="login.html"
+}
+
+</script>
+
 </head>
 
-<body style="background:#140021;color:white;text-align:center;margin-top:100px;">
+<body>
 
-<h2>ReplyShastra</h2>
-
-<a href="app.html">
-<button style="padding:15px 30px;font-size:18px;">
-Open App
-</button>
-</a>
+Loading ReplyShastra...
 
 </body>
 </html>
