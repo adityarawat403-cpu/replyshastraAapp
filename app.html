@@ -127,6 +127,32 @@ background:#1b1b24;
 border:1px solid rgba(255,255,255,.1);
 }
 
+/* TYPING */
+
+.typing{
+display:flex;
+gap:4px;
+padding:10px 14px;
+background:#1b1b24;
+border-radius:18px;
+width:60px;
+}
+
+.dot{
+width:6px;
+height:6px;
+background:white;
+border-radius:50%;
+animation:blink 1.2s infinite;
+}
+
+@keyframes blink{
+0%,80%,100%{opacity:.2}
+40%{opacity:1}
+}
+
+/* INPUT */
+
 .inputArea{
 position:fixed;
 bottom:0;
@@ -163,8 +189,6 @@ cursor:pointer;
 
 <body>
 
-<!-- MENU -->
-
 <div id="menu" class="sideMenu">
 
 <a href="#" onclick="installApp()">Download App</a>
@@ -181,8 +205,6 @@ cursor:pointer;
 
 <div id="menuOverlay"></div>
 
-<!-- HEADER -->
-
 <div class="header">
 
 <div class="menuBtn" onclick="toggleMenu()">☰</div>
@@ -197,11 +219,7 @@ cursor:pointer;
 
 </div>
 
-<!-- CHAT -->
-
 <div id="chat" class="chatbox"></div>
-
-<!-- INPUT -->
 
 <div class="inputArea">
 
@@ -215,22 +233,16 @@ cursor:pointer;
 
 <script>
 
-/* LOGIN CHECK */
-
 const userEmail = localStorage.getItem("rs_user")
 
 if(!userEmail){
 window.location="login.html"
 }
 
-/* USERNAME */
-
 if(userEmail){
 const name=userEmail.split("@")[0]
 document.getElementById("username").innerText=name
 }
-
-/* MENU */
 
 let menuOpen=false
 
@@ -248,8 +260,6 @@ overlay.style.display=menuOpen?"block":"none"
 
 document.getElementById("menuOverlay").onclick=toggleMenu
 
-/* CHAT */
-
 const chat=document.getElementById("chat")
 const text=document.getElementById("text")
 
@@ -260,6 +270,7 @@ div.className="msg "+type
 div.innerText=msg
 
 chat.appendChild(div)
+
 chat.scrollTop=chat.scrollHeight
 
 }
@@ -269,17 +280,22 @@ chat.scrollTop=chat.scrollHeight
 function showTyping(){
 
 let typing=document.createElement("div")
-typing.className="msg bot"
+
+typing.className="typing"
 typing.id="typing"
-typing.innerText="Typing..."
+
+typing.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>"
 
 chat.appendChild(typing)
+
+chat.scrollTop=chat.scrollHeight
 
 }
 
 function removeTyping(){
 
 let t=document.getElementById("typing")
+
 if(t)t.remove()
 
 }
@@ -321,8 +337,6 @@ document.getElementById("replySound").play()
 },1200)
 
 }
-
-/* ENTER KEY */
 
 text.addEventListener("keypress",e=>{
 if(e.key==="Enter")send()
