@@ -127,13 +127,6 @@ background:#1b1b24;
 border:1px solid rgba(255,255,255,.1);
 }
 
-@keyframes fadeIn{
-from{opacity:0;transform:translateY(10px);}
-to{opacity:1;transform:translateY(0);}
-}
-
-/* INPUT */
-
 .inputArea{
 position:fixed;
 bottom:0;
@@ -154,8 +147,6 @@ background:#0e0e14;
 color:white;
 }
 
-/* SEND BUTTON */
-
 .sendBtn{
 padding:12px 18px;
 border:none;
@@ -163,48 +154,6 @@ border-radius:14px;
 background:linear-gradient(135deg,#c0c0c0,#ffffff);
 color:black;
 font-weight:600;
-cursor:pointer;
-}
-
-/* INSTALL POPUP */
-
-.installPopup{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
-background:#140021;
-padding:18px;
-border-top-left-radius:20px;
-border-top-right-radius:20px;
-display:none;
-align-items:center;
-gap:14px;
-z-index:200;
-}
-
-.installPopup img{
-width:42px;
-border-radius:10px;
-}
-
-.installText{
-flex:1;
-}
-
-.installBtn{
-background:#7b2cff;
-border:none;
-padding:8px 14px;
-border-radius:10px;
-color:white;
-cursor:pointer;
-}
-
-.laterBtn{
-background:none;
-border:none;
-color:#bbb;
 cursor:pointer;
 }
 
@@ -257,26 +206,12 @@ cursor:pointer;
 <div class="inputArea">
 
 <input id="text" placeholder="Describe your situation...">
-
 <button class="sendBtn" onclick="send()">Send</button>
 
 </div>
 
-<!-- INSTALL POPUP -->
-
-<div id="installPopup" class="installPopup">
-
-<img src="icon.png">
-
-<div class="installText">
-<h3>Install ReplyShastra</h3>
-<p>Faster access. Works like real app.</p>
-</div>
-
-<button class="installBtn" onclick="installApp()">Install</button>
-<button class="laterBtn" onclick="closeInstall()">Later</button>
-
-</div>
+<audio id="sendSound" src="send.mp3"></audio>
+<audio id="replySound" src="reply.mp3"></audio>
 
 <script>
 
@@ -329,13 +264,34 @@ chat.scrollTop=chat.scrollHeight
 
 }
 
-async function send(){
+/* TYPING */
+
+function showTyping(){
+
+let typing=document.createElement("div")
+typing.className="msg bot"
+typing.id="typing"
+typing.innerText="Typing..."
+
+chat.appendChild(typing)
+
+}
+
+function removeTyping(){
+
+let t=document.getElementById("typing")
+if(t)t.remove()
+
+}
+
+/* SEND */
+
+function send(){
 
 let msg=text.value.trim()
 
 if(!msg)return
 
-// send sound
 try{
 document.getElementById("sendSound").play()
 }catch{}
@@ -366,42 +322,11 @@ document.getElementById("replySound").play()
 
 }
 
-/* INSTALL SYSTEM */
+/* ENTER KEY */
 
-let deferredPrompt;
-
-window.addEventListener('beforeinstallprompt',(e)=>{
-
-e.preventDefault();
-deferredPrompt=e;
-
-setTimeout(()=>{
-document.getElementById("installPopup").style.display="flex"
-},3000)
-
-});
-
-function installApp(){
-
-if(deferredPrompt){
-
-deferredPrompt.prompt();
-
-deferredPrompt.userChoice.then(()=>{
-document.getElementById("installPopup").style.display="none"
-});
-
-}else{
-
-alert("Install option not available. Please use browser menu.");
-
-}
-
-}
-
-function closeInstall(){
-document.getElementById("installPopup").style.display="none"
-}
+text.addEventListener("keypress",e=>{
+if(e.key==="Enter")send()
+})
 
 function logout(){
 
