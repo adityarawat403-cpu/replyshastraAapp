@@ -71,17 +71,52 @@ left:-260px;
 width:260px;
 height:100%;
 background:#140021;
-padding:90px 25px;
+padding:20px 25px;
 transition:.35s;
 z-index:100;
+overflow:auto;
 }
 
 .sideMenu a{
 display:block;
-margin:22px 0;
-font-size:18px;
+margin:18px 0;
+font-size:17px;
 text-decoration:none;
 color:white;
+}
+
+/* USER BLOCK */
+
+.userBlock{
+margin-top:60px;
+padding-bottom:15px;
+border-bottom:1px solid rgba(255,255,255,.1);
+}
+
+.userName{
+font-size:18px;
+font-weight:600;
+}
+
+.userPlan{
+font-size:13px;
+opacity:.7;
+margin-top:3px;
+}
+
+/* INSTALL BUTTON */
+
+.installBtnMenu{
+margin-top:25px;
+padding:12px;
+text-align:center;
+background:linear-gradient(135deg,#7b2cff,#b067ff);
+border-radius:10px;
+font-weight:600;
+}
+
+.installBtnMenu a{
+margin:0;
 }
 
 #menuOverlay{
@@ -191,11 +226,23 @@ cursor:pointer;
 
 <div id="menu" class="sideMenu">
 
-<a href="#" onclick="installApp()">Download App</a>
+<!-- USER INFO -->
+
+<div class="userBlock">
+<div id="menuName" class="userName">User</div>
+<div class="userPlan">Free Plan</div>
+</div>
+
+<a href="#">Subscription</a>
+
 <a href="#" onclick="shareApp()">Share App</a>
+<a href="about.html">About</a>
 <a href="privacy.html">Privacy</a>
 <a href="terms.html">Terms</a>
-<a href="about.html">About</a>
+
+<div class="installBtnMenu">
+<a href="#" onclick="installApp()">⬇ Install ReplyShastra</a>
+</div>
 
 <hr style="opacity:.2;margin:25px 0;">
 
@@ -241,8 +288,12 @@ window.location="login.html"
 }
 
 if(userEmail){
+
 const name=userEmail.split("@")[0]
+
 document.getElementById("username").innerText=name
+document.getElementById("menuName").innerText=name
+
 }
 
 let menuOpen=false
@@ -275,8 +326,6 @@ chat.scrollTop=chat.scrollHeight
 
 }
 
-/* TYPING */
-
 function showTyping(){
 
 let typing=document.createElement("div")
@@ -287,8 +336,6 @@ typing.id="typing"
 typing.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>"
 
 chat.appendChild(typing)
-
-chat.scrollTop=chat.scrollHeight
 
 try{
 document.getElementById("typingSound").play()
@@ -302,8 +349,6 @@ let t=document.getElementById("typing")
 if(t)t.remove()
 
 }
-
-/* SEND */
 
 function send(){
 
@@ -369,8 +414,6 @@ alert("Share not supported on this device")
 }
 
 }
-
-/* INSTALL APP */
 
 let deferredPrompt;
 
