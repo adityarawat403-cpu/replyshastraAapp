@@ -230,6 +230,7 @@ cursor:pointer;
 
 <audio id="sendSound" src="send.mp3"></audio>
 <audio id="replySound" src="reply.mp3"></audio>
+<audio id="typingSound" src="typing.mp3"></audio>
 
 <script>
 
@@ -270,7 +271,6 @@ div.className="msg "+type
 div.innerText=msg
 
 chat.appendChild(div)
-
 chat.scrollTop=chat.scrollHeight
 
 }
@@ -290,12 +290,15 @@ chat.appendChild(typing)
 
 chat.scrollTop=chat.scrollHeight
 
+try{
+document.getElementById("typingSound").play()
+}catch{}
+
 }
 
 function removeTyping(){
 
 let t=document.getElementById("typing")
-
 if(t)t.remove()
 
 }
@@ -362,6 +365,33 @@ url:"https://replyshastra.web.app"
 }else{
 
 alert("Share not supported on this device")
+
+}
+
+}
+
+/* INSTALL APP */
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt',(e)=>{
+e.preventDefault();
+deferredPrompt=e;
+});
+
+function installApp(){
+
+if(deferredPrompt){
+
+deferredPrompt.prompt();
+
+deferredPrompt.userChoice.then(()=>{
+deferredPrompt=null;
+});
+
+}else{
+
+alert("Install option not available. Use browser menu.");
 
 }
 
