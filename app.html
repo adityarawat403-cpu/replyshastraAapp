@@ -335,6 +335,11 @@ let msg=text.value.trim()
 
 if(!msg)return
 
+// send sound
+try{
+document.getElementById("sendSound").play()
+}catch{}
+
 addMessage(msg,"user")
 
 text.value=""
@@ -352,6 +357,10 @@ let reply =
 "Reply 3:\nI hate that I forgot your birthday. You deserve better and I'm really sorry.";
 
 addMessage(reply,"bot")
+
+try{
+document.getElementById("replySound").play()
+}catch{}
 
 },1200)
 
