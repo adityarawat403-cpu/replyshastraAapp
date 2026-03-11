@@ -1,13 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+
 <title>ReplyShastra AI</title>
+
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#7b2cff">
 <link rel="icon" href="icon.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 
 *{
@@ -23,6 +28,8 @@ color:white;
 height:100vh;
 overflow:hidden;
 }
+
+/* HEADER */
 
 .header{
 position:fixed;
@@ -54,6 +61,8 @@ margin-left:auto;
 font-size:13px;
 opacity:.8;
 }
+
+/* SIDE MENU */
 
 .sideMenu{
 position:fixed;
@@ -99,12 +108,6 @@ text-align:center;
 background:linear-gradient(135deg,#7b2cff,#b067ff);
 border-radius:12px;
 font-weight:600;
-font-size:16px;
-}
-
-.installBtnMenu a{
-color:white;
-text-decoration:none;
 }
 
 #menuOverlay{
@@ -114,6 +117,8 @@ background:rgba(0,0,0,.55);
 display:none;
 z-index:55;
 }
+
+/* CHAT */
 
 .chatbox{
 position:fixed;
@@ -134,7 +139,6 @@ max-width:78%;
 padding:12px 15px;
 border-radius:18px;
 font-size:15px;
-line-height:1.5;
 }
 
 .user{
@@ -148,18 +152,16 @@ background:#1b1b24;
 border:1px solid rgba(255,255,255,.1);
 }
 
+/* COPY */
+
 .copyBtn{
-margin-top:8px;
+margin-top:6px;
 font-size:12px;
 opacity:.7;
 cursor:pointer;
-background:rgba(255,255,255,0.1);
-border:none;
-color:white;
-padding:4px 10px;
-border-radius:8px;
-display:inline-block;
 }
+
+/* TYPING */
 
 .typing{
 display:flex;
@@ -168,7 +170,6 @@ padding:10px 14px;
 background:#1b1b24;
 border-radius:18px;
 width:60px;
-align-self:flex-start;
 }
 
 .dot{
@@ -179,13 +180,12 @@ border-radius:50%;
 animation:blink 1.2s infinite;
 }
 
-.dot:nth-child(2){animation-delay:.2s}
-.dot:nth-child(3){animation-delay:.4s}
-
 @keyframes blink{
 0%,80%,100%{opacity:.2}
 40%{opacity:1}
 }
+
+/* INPUT */
 
 .inputArea{
 position:fixed;
@@ -196,7 +196,6 @@ display:flex;
 gap:10px;
 padding:12px;
 background:rgba(0,0,0,.65);
-backdrop-filter:blur(10px);
 }
 
 input{
@@ -206,16 +205,6 @@ border-radius:14px;
 border:none;
 background:#0e0e14;
 color:white;
-font-size:15px;
-font-family:'Quicksand',sans-serif;
-}
-
-input::placeholder{
-color:rgba(255,255,255,0.4);
-}
-
-input:focus{
-outline:1px solid rgba(123,44,255,0.5);
 }
 
 .sendBtn{
@@ -226,122 +215,208 @@ background:linear-gradient(135deg,#c0c0c0,#ffffff);
 color:black;
 font-weight:600;
 cursor:pointer;
-font-family:'Quicksand',sans-serif;
-}
-
-.sendBtn:disabled{
-opacity:0.5;
-cursor:not-allowed;
-}
-
-.installPopup{
-position:fixed;
-bottom:-120px;
-left:0;
-right:0;
-background:#140021;
-padding:16px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-transition:.4s;
-z-index:200;
-box-shadow:0 -10px 30px rgba(0,0,0,.6);
-}
-
-.installPopup.show{bottom:0;}
-
-.installPopup button{
-border:none;
-padding:8px 14px;
-border-radius:8px;
-background:#7b2cff;
-color:white;
-cursor:pointer;
-}
-
-.installPopup .later{background:#444;}
-
-/* Limit warning */
-.limitWarn{
-text-align:center;
-font-size:13px;
-opacity:0.6;
-padding:8px;
 }
 
 </style>
+
 </head>
+
 <body>
 
-<!-- ===== SIDE MENU ===== -->
+<!-- MENU -->
+
 <div id="menu" class="sideMenu">
-  <div class="userBlock">
-    <div id="menuName" class="userName">User</div>
-    <div class="userPlan">Free Plan \u2022 <span id="menuReplies"></span> replies left</div>
-  </div>
-  <a href="#">Subscription</a>
-  <a href="#" onclick="shareApp()">Share App</a>
-  <a href="about.html">About</a>
-  <a href="privacy.html">Privacy</a>
-  <a href="terms.html">Terms</a>
-  <div class="installBtnMenu">
-    <a href="#" onclick="installApp()">\u2b07 Download App</a>
-  </div>
-  <hr style="opacity:.2;margin:25px 0;">
-  <a href="#" onclick="logout()">Logout</a>
+
+<div class="userBlock">
+<div id="menuName" class="userName">User</div>
+<div class="userPlan">Free Plan</div>
+</div>
+
+<a href="#">Subscription</a>
+<a href="#">Share App</a>
+<a href="about.html">About</a>
+<a href="privacy.html">Privacy</a>
+<a href="terms.html">Terms</a>
+
+<div class="installBtnMenu">
+<a href="#">⬇ Download App</a>
+</div>
+
+<hr style="opacity:.2;margin:25px 0;">
+
+<a href="#" onclick="logout()">Logout</a>
+
 </div>
 
 <div id="menuOverlay"></div>
 
-<!-- ===== HEADER ===== -->
+<!-- HEADER -->
+
 <div class="header">
-  <div class="menuBtn" onclick="toggleMenu()">\u2630</div>
-  <div class="logo"><img src="icon.png"></div>
-  <div>ReplyShastra</div>
-  <div id="username" class="username"></div>
+
+<div class="menuBtn" onclick="toggleMenu()">☰</div>
+
+<div class="logo">
+<img src="icon.png">
 </div>
 
-<!-- ===== CHAT ===== -->
+<div>ReplyShastra</div>
+
+<div id="username" class="username"></div>
+
+</div>
+
+<!-- CHAT -->
+
 <div id="chat" class="chatbox"></div>
 
-<!-- ===== INPUT ===== -->
+<!-- INPUT -->
+
 <div class="inputArea">
-  <input id="text" placeholder="Apni situation batao... (e.g. girlfriend gussa hai, kya reply karu?)">
-  <button class="sendBtn" id="sendBtn" onclick="send()">Send</button>
-</div>
 
-<!-- ===== INSTALL POPUP ===== -->
-<div id="installPopup" class="installPopup">
-  <span>Install ReplyShastra for faster access</span>
-  <div>
-    <button onclick="installApp()">Install</button>
-    <button class="later" onclick="closeInstall()">Later</button>
-  </div>
-</div>
+<input id="text" placeholder="Describe your situation...">
 
-<!-- ===== AUDIO ===== -->
-<audio id="sendSound" src="send.mp3"></audio>
-<audio id="replySound" src="reply.mp3"></audio>
-<audio id="typingSound" src="typing.mp3"></audio>
+<button class="sendBtn" onclick="send()">Send</button>
+
+</div>
 
 <script>
 
-// ============================================================
-// \ud83d\udd11 APNI OPENROUTER API KEY YAHAN DAALO
-// ============================================================
-const API_KEY = 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
-// ============================================================
+const user = localStorage.getItem("rs_user")
 
-const MODEL = "mistralai/mistral-7b-instruct:free"
+if(!user){
+window.location="login.html"
+}
 
-// System prompt \u2014 AI ko batata hai ke yeh kya kare
-const SYSTEM_PROMPT = `Tu ReplyShastra AI hai \u2014 ek Indian relationship reply assistant.
+const name = user.split("@")[0]
 
-Tera kaam hai: user jo bhi situation bataye (girlfriend, boyfriend, crush, dost, family \u2014 koi bhi), us situation ke liye 2-3 smart, natural aur helpful reply options generate karna.
+document.getElementById("username").innerText=name
+document.getElementById("menuName").innerText=name
 
-Rules:
-- Replies Hinglish ya Hindi mein hone chahiye (jaise log actually WhatsApp pe likhte hain)
-- Har reply short aur natural lage \u2014 robotic nahi
-- Emotional tone samajh ke reply karo (gussa, pyaar, sorry, flirt, serious \u2014 jo bhi situation ho)
-- 2-3 options do, number karke \u2014
+let repliesLeft = localStorage.getItem("replies_left")
+
+if(!repliesLeft){
+repliesLeft=10
+localStorage.setItem("replies_left",10)
+}
+
+function updateHeader(){
+document.getElementById("username").innerText=name+" | "+repliesLeft+" left"
+}
+
+updateHeader()
+
+let menuOpen=false
+
+function toggleMenu(){
+
+const menu=document.getElementById("menu")
+const overlay=document.getElementById("menuOverlay")
+
+menuOpen=!menuOpen
+
+menu.style.left=menuOpen?"0":"-260px"
+overlay.style.display=menuOpen?"block":"none"
+
+}
+
+document.getElementById("menuOverlay").onclick=toggleMenu
+
+const chat=document.getElementById("chat")
+const text=document.getElementById("text")
+
+function addMessage(msg,type){
+
+let div=document.createElement("div")
+div.className="msg "+type
+div.innerText=msg
+
+if(type==="bot"){
+
+let copy=document.createElement("div")
+copy.className="copyBtn"
+copy.innerText="Copy"
+
+copy.onclick=()=>{
+navigator.clipboard.writeText(msg)
+copy.innerText="Copied"
+setTimeout(()=>copy.innerText="Copy",1200)
+}
+
+div.appendChild(copy)
+
+}
+
+chat.appendChild(div)
+chat.scrollTop=chat.scrollHeight
+
+}
+
+function showTyping(){
+
+let typing=document.createElement("div")
+
+typing.className="typing"
+typing.id="typing"
+
+typing.innerHTML="<div class='dot'></div><div class='dot'></div><div class='dot'></div>"
+
+chat.appendChild(typing)
+
+}
+
+function removeTyping(){
+
+let t=document.getElementById("typing")
+if(t)t.remove()
+
+}
+
+function send(){
+
+if(repliesLeft<=0){
+
+addMessage("Daily reply limit reached.","bot")
+return
+
+}
+
+let msg=text.value.trim()
+
+if(!msg)return
+
+addMessage(msg,"user")
+
+text.value=""
+
+showTyping()
+
+setTimeout(()=>{
+
+removeTyping()
+
+let reply="Example reply generated by AI."
+
+addMessage(reply,"bot")
+
+repliesLeft--
+
+localStorage.setItem("replies_left",repliesLeft)
+
+updateHeader()
+
+},1200)
+
+}
+
+function logout(){
+
+localStorage.removeItem("rs_user")
+window.location="login.html"
+
+}
+
+</script>
+
+</body>
+</html>
